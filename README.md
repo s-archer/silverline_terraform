@@ -1,6 +1,8 @@
 # silverline_terraform
 
-A very basic example of using Terraform with the Silverline API.  The configuration will prompt for credentials, login to obtain a token and then use the token to get a list of configured proxies.
+A very basic example of using Terraform with the Silverline API.  You can find Silverline API documentation here: https://portal.f5silverline.com/docs/api/v1/index.md Please note that access is limited to authenticated users only.
+
+When applying the configuration, Terraform will prompt for your credentials, login to Silverline to obtain a token and then use the token to get a list of configured proxies within your account.
 
 As mentioned in the main.tf comments, API request output is written to file (security risk, which could be mitigated), but there is currenlty no other option with Terraform until either:
 - terraform external data source allows muli-level json query, or...
