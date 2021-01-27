@@ -1,6 +1,6 @@
 # silverline_terraform
 
-A very basic example of using Terraform with the Silverline API.  You can find Silverline API documentation here: https://portal.f5silverline.com/docs/api/v1/index.md Please note that access is limited to authenticated users only.
+A very basic example of using Terraform with the Silverline API.  You can find Silverline API documentation here: https://portal.f5silverline.com/docs/api/v1/index.md.  Please note that access is limited to authenticated users only.
 
 When applying the configuration, Terraform will prompt for your credentials, login to Silverline to obtain a token and then use the token to get a list of configured proxies within your account.
 
