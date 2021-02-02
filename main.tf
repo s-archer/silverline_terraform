@@ -53,7 +53,7 @@ resource "null_resource" "get_proxies" {
 resource "null_resource" "create_proxy" {
 
   provisioner "local-exec" {
-    command = "curl --location --request POST -H 'Content-type: application/json' --data-raw '${templatefile("./create_proxy_json.tpl", { var1  = "one", var2  = "two" } )}' -H 'X-Authorization-Token: ${jsondecode(data.local_file.login_response.content).data.attributes.auth_token}' ${var.silverline_proxies_url} > ${path.module}/create_proxy_response.json"
+    command = "curl --location --request POST -H 'Content-type: application/json' --data-raw '${templatefile("./create_proxy_json.tpl", { var1  = var.proxy_var_one, var2  = var.proxy_var_two } )}' -H 'X-Authorization-Token: ${jsondecode(data.local_file.login_response.content).data.attributes.auth_token}' ${var.silverline_proxies_url} > ${path.module}/create_proxy_response.json"
   }
 
   provisioner "local-exec" {
