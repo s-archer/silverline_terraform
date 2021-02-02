@@ -35,15 +35,40 @@ data "local_file" "login_response" {
 #   value = jsondecode(data.local_file.login_response.content).data.attributes.auth_token
 # }
 
+
 # Get a list of proxies using the token in the X-Authorization-Token header.  Write output to get_proxies_response.json file.
 resource "null_resource" "get_proxies" {
 
   provisioner "local-exec" {
-    command = "curl -k -X GET -H 'Content-type: application/json' -H 'X-Authorization-Token: ${jsondecode(data.local_file.login_response.content).data.attributes.auth_token}' ${var.silverline_get_proxies_url} > ${path.module}/get_proxies_response.json"
+    command = "curl -k -X GET -H 'Content-type: application/json' -H 'X-Authorization-Token: ${jsondecode(data.local_file.login_response.content).data.attributes.auth_token}' ${var.silverline_proxies_url} > ${path.module}/get_proxies_response.json"
   }
 
   provisioner "local-exec" {
     when    = destroy
     command = "rm -f ${path.module}/get_proxies_response.json"
   }
+}
+
+# # Create a new Silverline proxy with API POST..
+resource "null_resource" "create_proxy" {
+
+  provisioner "local-exec" {
+    command = "curl --location --request POST -H 'Content-type: application/json' --data-raw '${templatefile("./create_proxy_json.tpl", { var1  = "one", var2  = "two" } )}' -H 'X-Authorization-Token: ${jsondecode(data.local_file.login_response.content).data.attributes.auth_token}' ${var.silverline_proxies_url} > ${path.module}/create_proxy_response.json"
+  }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm -f ${path.module}/create_proxy_response.json"
+  }
+}
+
+#  Open the proxy create response file
+data "local_file" "create_proxy_response" {
+  filename   = "${path.module}/create_proxy_response.json"
+  depends_on = [null_resource.create_proxy]
+}
+
+#  Output the create proxy response for testing
+output "proxy_response" {
+  value = jsondecode(data.local_file.create_proxy_response.content)
 }
